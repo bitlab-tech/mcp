@@ -1,6 +1,6 @@
 # News MCP (Model Context Protocol)
 
-A Node.js CLI tool built with TypeScript that implements the Model Context Protocol for news-related functionality.
+A Node.js tool built with TypeScript that implements the Model Context Protocol for news-related functionality.
 
 <img src="screenshots/1.png" alt="Cerner" width="700">
 
@@ -8,16 +8,16 @@ A Node.js CLI tool built with TypeScript that implements the Model Context Proto
 
 - Built with TypeScript
 - Implements Model Context Protocol
-- Command-line interface for news operations
 - Uses Zod for runtime type validation
 
 ## Installation
 
 ```bash
 # Clone the repository
-git clone [repository-url]
+git clone git@github.com:bitlab-tech/mcp.git
 
 # Navigate to the project directory
+cd mcp
 cd news-mcp
 
 # Install dependencies
