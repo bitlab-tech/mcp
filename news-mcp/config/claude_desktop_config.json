@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "news-mcp": {
+      "command": "node",
+      "args": [
+        "/your/path/to/news-mcp/build/index.js"
+      ],
+      "env": {
+        "NEWSDATA_API_URL": "https://newsdata.io/api/1/latest",
+        "NEWSDATA_API_KEY": "your_newsdata_api_key"
+      }
+    }
+  }
+}
