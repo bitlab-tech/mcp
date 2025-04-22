@@ -105,7 +105,7 @@ async function getNews(request: any) {
     const args = getNewsSchema.parse(request.params.arguments);
 
     // Make the API call to NEWSDATA
-    let url = `https://${process.env.NEWSDATA_API_URL}?apikey=${process.env.NEWSDATA_API_KEY}`;
+    let url = `${process.env.NEWSDATA_API_URL}?apikey=${process.env.NEWSDATA_API_KEY}`;
     for (const [key, value] of Object.entries(args)) {
       url += `&${key}=${value}`;
     }
