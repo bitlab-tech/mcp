@@ -20,7 +20,7 @@ const server = new Server({
 
 // Define tool schema using zod
 const getNewsSchema = z.object({
-  country: z.string().describe("ISO 3166 country code (e.g. us, vi, jp)"),
+  country: z.string().nullable().describe("ISO 3166 country code (e.g. us, vi, jp)"),
   category: z.enum([
     "business",
     "crime",
@@ -39,10 +39,10 @@ const getNewsSchema = z.object({
     "top",
     "tourism",
     "world"
-  ]).describe("News category to search for"),
+  ]).nullable().describe("News category to search for"),
 });
 
-// Helper function to format a cocktail recipe nicely
+// Helper function to format news result
 function formatNews(news: any) {
   return `
   ${news.title}
