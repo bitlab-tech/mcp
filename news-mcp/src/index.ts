@@ -20,7 +20,7 @@ const server = new Server({
 
 // Define tool schema using zod
 const getNewsSchema = z.object({
-  country: z.string().nullable().describe("ISO 3166 country code (e.g. us, vi, jp)"),
+  country: z.string().optional().describe("ISO 3166 country code (e.g. us, vi, jp)"),
   category: z.enum([
     "business",
     "crime",
@@ -39,7 +39,7 @@ const getNewsSchema = z.object({
     "top",
     "tourism",
     "world"
-  ]).nullable().describe("News category to search for"),
+  ]).optional().describe("News category to search for"),
 });
 
 // Helper function to format news result
@@ -67,11 +67,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             country: {
               type: "string",
-              description: "ISO 3166 country code (e.g. us, vi for Vietnam instead of vn, jp)"
+              description: "ISO 3166 country code (e.g. us, vi for Vietnam instead of vn, jp). Values can be multiple separated by commas or as a JSON string array."
             },
             category: {
               type: "string",
-              description: "News category to search for (e.g. dosmestic, lifestyle, sport)"
+              description: "News category to search for (e.g. dosmestic, lifestyle, sport). Values can be multiple separated by commas or as a JSON string array."
             },
           },
           required: []
@@ -99,6 +99,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   };
 });
 
+function isJson(str: string) {
+  try {
+      JSON.parse(str);
+  } catch (e) {
+      return false;
+  }
+  return true;
+}
+
 async function getNews(request: any) {
   try {
     // Parse and validate arguments using zod
@@ -106,7 +115,8 @@ async function getNews(request: any) {
 
     // Make the API call to NEWSDATA
     let url = `${process.env.NEWSDATA_API_URL}?apikey=${process.env.NEWSDATA_API_KEY}`;
-    for (const [key, value] of Object.entries(args)) {
+    for (const [key, values] of Object.entries(args)) {
+      const value = isJson(values) ? JSON.parse(values).join(",") : values;
       url += `&${key}=${value}`;
     }
 
