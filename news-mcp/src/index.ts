@@ -40,6 +40,7 @@ const getNewsSchema = z.object({
     "tourism",
     "world"
   ]).optional().describe("News category to search for"),
+  page: z.string().optional().describe("The code for next page.")
 });
 
 // Helper function to format news result
@@ -73,6 +74,10 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "string",
               description: "News category to search for (e.g. dosmestic, lifestyle, sport). Values can be multiple separated by commas or as a JSON string array."
             },
+            page: {
+              type: "string",
+              description: "The page code to search for (e.g. 1745440135523675502)."
+            }
           },
           required: []
         }
@@ -120,56 +125,67 @@ async function getNews(request: any) {
       url += `&${key}=${value}`;
     }
 
-    const response = await fetch(url);
+    // Query news
+    return await queryNews(url, args);
 
-    if (!response.ok) {
-      throw new Error(`NewsData API error: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-
-    // Check if any drinks were found
-    if (!data.results) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `No news found matching the arguments. Try a different search term.`
-          }
-        ]
-      };
-    }
-
-    // Format each result
-    const news = data.results.map(formatNews);
-
-    // Create the formatted response
-    const result = `
-      Found ${data.totalResults} article(s) matching "${args.category}":
-      \n\n${news.join('\n\n')}
-    `;
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: result
-        }
-      ]
-    };
   } catch (error) {
-    console.error("Error in get_news tool:", error);
+    return handleError(error);
+  }
+}
 
+async function queryNews(url: string, args: object) {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`NewsData API error: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+
+  // Check if any drinks were found
+  if (!data.results) {
     return {
-      isError: true,
       content: [
         {
           type: "text",
-          text: `Error searching for news: ${error instanceof Error ? error.message : 'Unknown error'}`
+          text: `No news found matching the arguments. Try a different search term.`
         }
       ]
     };
   }
+
+  // Format each result
+  const news = data.results.map(formatNews);
+
+  // Create the formatted response
+  const result = `
+    Found ${data.totalResults} article(s) matching "${args}":
+    \n\n${news.join('\n\n')}
+    \n\nNext page code: ${news.nextPage}
+  `;
+
+  return {
+    content: [
+      {
+        type: "text",
+        text: result
+      }
+    ]
+  };
+}
+
+function handleError(error: any) {
+  console.error("Error in get_news tool:", error);
+
+  return {
+    isError: true,
+    content: [
+      {
+        type: "text",
+        text: `Error searching for news: ${error instanceof Error ? error.message : 'Unknown error'}`
+      }
+    ]
+  };
 }
 
 // Connect the transport
