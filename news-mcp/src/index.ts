@@ -104,15 +104,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   };
 });
 
-function isJson(str: string) {
-  try {
-      JSON.parse(str);
-  } catch (e) {
-      return false;
-  }
-  return true;
-}
-
 async function getNews(request: any) {
   try {
     // Parse and validate arguments using zod
@@ -121,8 +112,7 @@ async function getNews(request: any) {
     // Make the API call to NEWSDATA
     let url = `${process.env.NEWSDATA_API_URL}?apikey=${process.env.NEWSDATA_API_KEY}`;
     for (const [key, values] of Object.entries(args)) {
-      const value = isJson(values) ? JSON.parse(values).join(",") : values;
-      url += `&${key}=${value}`;
+      url += `&${key}=${values}`;
     }
 
     // Query news
@@ -159,9 +149,9 @@ async function queryNews(url: string, args: object) {
 
   // Create the formatted response
   const result = `
-    Found ${data.totalResults} article(s) matching "${args}":
+    Found ${data.totalResults} article(s) matching ${JSON.stringify(args)}:
     \n\n${news.join('\n\n')}
-    \n\nNext page code: ${news.nextPage}
+    \n\nNext page code: ${data.nextPage}
   `;
 
   return {
