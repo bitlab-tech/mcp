@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "memory-mcp": {
+      "command": "node",
+      "args": [
+        "/your/path/to/memory-mcp/build/index.js"
+      ],
+      "env": {
+        "MEM_PATH": "/your/path/to/memory/file.json"
+      }
+    }
+  }
+}
