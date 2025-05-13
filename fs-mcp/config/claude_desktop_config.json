@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "fs-mcp": {
+      "command": "node",
+      "args": [
+        "/your/path/to/news-mcp/build/index.js"
+      ]
+    }
+  }
+}
