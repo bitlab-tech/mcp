@@ -3,6 +3,7 @@
 A Node.js-based MCP (Model Context Protocol) server that provides file system operations through a standardized interface. This tool allows AI models to interact with the file system in a controlled and secure manner.
 
 <img src="screenshots/1.png" alt="Cerner" width="700">
+<img src="screenshots/2.png" alt="Cerner" width="700">
 
 ## Features
 

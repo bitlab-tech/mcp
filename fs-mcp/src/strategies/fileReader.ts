@@ -62,6 +62,12 @@ export class FileReader {
       throw new Error(`No strategy found for file extension: ${extension}`);
     }
 
-    return await strategy.read(uri);
+    const result = await strategy.read(uri);
+    return {
+      content: [{
+        type: result.type,
+        ...(result.type === 'image' ? result.content : { text: result.content })
+      }]
+    };
   }
 }
