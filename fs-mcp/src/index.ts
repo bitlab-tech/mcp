@@ -109,7 +109,7 @@ async function readFile(args: Record<string, unknown>) {
 
 // Function to handle errors
 function handleError(error: any) {
-  console.error("Error in files_mcp tool:", error);
+  console.error("Error in fs_mcp tool:", error);
 
   return {
     isError: true,
@@ -126,7 +126,7 @@ function handleError(error: any) {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error("Files MCP server running on stdio");
+  console.error("File System MCP server running on stdio");
 }
 
 main().catch(err => {
