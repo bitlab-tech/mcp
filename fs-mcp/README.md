@@ -7,7 +7,7 @@ A Node.js-based MCP (Model Context Protocol) server that provides file system op
 
 ## Features
 
-- Read file contents
+- Read file contents (including text, images, and PDFs)
 - List directory contents
 - Secure file system access through MCP protocol
 - TypeScript support
@@ -42,6 +42,7 @@ The server provides two main tools:
 
 1. `read_file`: Read the contents of a file
    - Input: `{ uri: string }` (absolute path to the file)
+   - Note: PDF files will be converted to a series of images.
 
 2. `read_folder`: List contents of a directory
    - Input: `{ uri: string }` (absolute path to the directory)
