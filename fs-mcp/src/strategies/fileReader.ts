@@ -17,9 +17,9 @@ export class TextFileStrategy implements FileReadingStrategy {
   async read(uri: string) {
     const textBuffer = await fs.readFile(uri);
     return {
-      text: [{
+      content: [{
         type: 'text',
-        content: textBuffer.toString('utf8')
+        text: textBuffer.toString('utf8')
       }]
     };
   }
@@ -39,10 +39,8 @@ export class ImageFileStrategy implements FileReadingStrategy {
     return  {
       content: [{
         type: 'image',
-        content: {
-          mimeType: `image/${ext}`,
-          data: imageBuffer.toString('base64')
-        }
+        mimeType: `image/${ext}`,
+        data: imageBuffer.toString('base64')
       }]
     };
   }
@@ -62,7 +60,7 @@ export class PdfFileStrategy implements FileReadingStrategy {
     });
     images.forEach((base64Str) => {
       const data = base64Str.replace("data:image/png;base64,", "");
-      content.push({ type: 'image', content: { mimeType: "image/png", data } });
+      content.push({ type: 'image', mimeType: "image/png", data });
     })
     return {
       content
