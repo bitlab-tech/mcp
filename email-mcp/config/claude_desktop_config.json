@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "email-mcp": {
+      "command": "node",
+      "args": [
+        "/your/path/to/email-mcp/build/index.js"
+      ],
+      "env": {
+        "IMAP_HOST": "your_imap_host",
+        "IMAP_USER": "your_imap_account_username",
+        "IMAP_PASS": "your_imap_account_password",
+        "IMAP_PORT": "993",
+        "SMTP_SERVICE": "smtp_service_name",
+        "SMTP_HOST": "your_smtp_host",
+        "SMTP_PORT": "587",
+        "SMTP_USER": "your_smtp_account_username",
+        "SMTP_PASS": "your_smtp_account_password"
+      }
+    }
+  }
+}
