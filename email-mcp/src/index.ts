@@ -123,7 +123,15 @@ async function readEmails(args: Record<string, unknown>) {
       content: [
         {
           type: "text",
-          text: JSON.stringify(emails)
+          text: JSON.stringify(emails.map(email => ({
+            from: email.from,
+            date: email.date,
+            inReplyTo: email.inReplyTo,
+            replyTo: email.replyTo,
+            to: email.to,
+            subject: email.subject,
+            text: email.text,
+          })))
         }
       ]
     }
