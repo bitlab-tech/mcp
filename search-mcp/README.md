@@ -2,6 +2,8 @@
 
 A Model Context Protocol (MCP) implementation for search functionality.
 
+<img src="screenshots/1.png" alt="Cerner" width="700">
+
 ## Description
 
 This project implements a search functionality using the Model Context Protocol (MCP) framework. It provides an interface for query-related operations.
