@@ -1,0 +1,74 @@
+{
+  "brave": {
+    "web_search": {
+      "url": "https://api.search.brave.com/res/v1/web/search",
+      "queries": {
+        "q": {
+          "description": "The client's search query term. The min query length is 1, max query length is 400, and the word limit 50."
+        },
+        "country": {
+          "description": "The 2 character country code where the search results come from. The default value is US. If value is ALL it will be global search."
+        },
+        "search_lang": {
+          "description": "The 2 or more character language code for which the search results are provided. This is optional and defaults to en."
+        },
+        "ui_lang": {
+          "description": "User interface language preferred in response. Usually of the format <language_code>-<country_code> See RFC 9110."
+        },
+        "count": {
+          "description": "The number of search results returned in response. The default is 20 and the maximum is 20. The actual number delivered may be less than requested. Combine this parameter with offset to page search results."
+        },
+        "offset": {
+          "description": "The zero based offset that indicates number of search result pages (count) to skip before returning the result. The default is 0 and the maximum is 9. The actual number delivered may be less than requested. Use this parameter along with the count parameter to page results. For example, if your user interface displays 10 search results per page, set count to 10 and offset to 0 to get the first page of results. For each subsequent page, increment offset by 1 (for example, 0, 1, 2). It is possible for multiple pages to include some overlap in results."
+        },
+        "freshness": {
+          "description": "Filters search results, when they were discovered, by date range. The following time deltas are supported. Day - pd - Discovered in last 24 hours. Week - pw - Discovered in last 7 Days. Month - pm - Discovered in last 31 Days. Year - py - Discovered in last 365 Days."
+        }
+      },
+      "headers": {
+        "Accept": "application/json",
+        "Accept-Encoding": "gzip",
+        "x-subscription-token": "BSA0LAYW1RxzEqF-VszYZBjLMdCpvM6"
+      }
+    }
+  },
+  "wikipedia": {
+    "search_articles": {
+      "url": "https://en.wikipedia.org/w/api.php",
+      "queries": {
+        "action": {
+          "description": "The action to perform, should be 'query'."
+        },
+        "generator": {
+          "description": "The generator, should be 'search'."
+        },
+        "gsrsearch": {
+          "description": "Search for page titles or content matching this value. You can use the search string to invoke special search features, depending on what the wiki's search backend implements."
+        },
+        "prop": {
+          "description": "Extract and thumbnail image, should be 'extracts', 'pageimages' for content and images, 'exintro' and 'explaintext' and 'info' for short info. If several values use '|' e.g. 'extracts|pageimages'."
+        },
+        "format": {
+          "description": "The format of the result. Default is 'html'. Must be 'json'."
+        },
+        "gsrlimit": {
+          "description": "The number of search results returned in response. The default is 10."
+        },
+        "explaintext": {
+          "description": "Whether the content of the result would be in plaintext or not. Default to false. Set it to true for plaintext content."
+        }
+      }
+    },
+    "get_page_content": {
+      "url": "https://en.wikipedia.org/w/index.php",
+      "queries": {
+        "title": {
+          "description": "The title of the page e.g. 'Leonhard_Euler'."
+        },
+        "action": {
+          "description": "Whether to display the content in html or raw format. Values are 'view' (default) and 'raw'. Must set to 'raw'."
+        }
+      }
+    }
+  }
+}
