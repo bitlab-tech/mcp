@@ -2,7 +2,7 @@
 
 A Model Context Protocol (MCP) implementation for search functionality.
 
-<img src="screenshots/1.png" alt="Cerner" width="700">
+<img src="screenshots/1.png" alt="Cerner" width="900">
 
 ## Description
 
