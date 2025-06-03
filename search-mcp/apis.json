@@ -28,7 +28,7 @@
       "headers": {
         "Accept": "application/json",
         "Accept-Encoding": "gzip",
-        "x-subscription-token": "BSA0LAYW1RxzEqF-VszYZBjLMdCpvM6"
+        "x-subscription-token": "your-x-subscription-token"
       }
     }
   },
@@ -57,7 +57,8 @@
         "explaintext": {
           "description": "Whether the content of the result would be in plaintext or not. Default to false. Set it to true for plaintext content."
         }
-      }
+      },
+      "headers": {}
     },
     "get_page_content": {
       "url": "https://en.wikipedia.org/w/index.php",
@@ -68,7 +69,8 @@
         "action": {
           "description": "Whether to display the content in html or raw format. Values are 'view' (default) and 'raw'. Must set to 'raw'."
         }
-      }
+      },
+      "headers": {}
     }
   }
 }
