@@ -60,6 +60,20 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         }
       },
       {
+        name: "create_folder",
+        description: "Create the folder given the absolute path",
+        inputSchema: {
+          type: "object",
+          properties: {
+            uri: {
+              type: "string",
+              description: "The folder's absolute path."
+            }
+          },
+          required: ["uri"]
+        }
+      },
+      {
         name: "create_file",
         description: "Create the file given the absolute path",
         inputSchema: {
@@ -97,6 +111,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       return await readFolder(args);
     case "read_file":
       return await readFile(args);
+    case "create_folder":
+      return await createFolder(args);
     case "create_file":
       return await createFile(args);
     default:
@@ -125,6 +141,16 @@ async function readFile(args: Record<string, unknown>) {
     return await fileReader.readFile(uri);
   } catch (error) {
     return handleError(error);
+  }
+}
+
+async function createFolder(args: Record<string, unknown>) {
+  try {
+    const { uri } = fsSchema.parse(args);
+    await fs.mkdir(uri);
+    return { content: [{ type: 'text', text: 'Folder created successfully' }] };
+  } catch (error) {
+    return handleError(error, 'Error creating folder');
   }
 }
 
