@@ -22,8 +22,9 @@ const server = new Server({
 });
 
 // Define tool schema using zod
-const readEntitySchema = z.object({
+export const fsSchema = z.object({
   uri: z.string().describe("The absolute path of the file/folder."),
+  content: z.string().optional().describe("The file content.")
 });
 
 // Register tools
@@ -58,6 +59,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           required: ["uri"]
         }
       },
+      {
+        name: "create_file",
+        description: "Create the file given the absolute path",
+        inputSchema: {
+          type: "object",
+          properties: {
+            uri: {
+              type: "string",
+              description: "The file's absolute path."
+            },
+            content: {
+              type: "string",
+              description: "The file's content."
+            }
+          },
+          required: ["uri", "content"]
+        }
+      }
     ]
   };
 });
@@ -78,6 +97,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       return await readFolder(args);
     case "read_file":
       return await readFile(args);
+    case "create_file":
+      return await createFile(args);
     default:
       throw new Error(`Unknown tool: ${name}`);
   }
@@ -86,7 +107,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 // Function to read the folder
 async function readFolder(args: Record<string, unknown>) {
   try {
-    const argsObj = readEntitySchema.parse(args);
+    const argsObj = fsSchema.parse(args);
     const { uri } = argsObj;
 
     const read = await fs.readdir(path.resolve(uri));
@@ -98,7 +119,7 @@ async function readFolder(args: Record<string, unknown>) {
 
 async function readFile(args: Record<string, unknown>) {
   try {
-    const argsObj = readEntitySchema.parse(args);
+    const argsObj = fsSchema.parse(args);
     const { uri } = argsObj;
 
     return await fileReader.readFile(uri);
@@ -107,18 +128,29 @@ async function readFile(args: Record<string, unknown>) {
   }
 }
 
+async function createFile(args: Record<string, unknown>) {
+  try {
+    const { uri, content } = fsSchema.parse(args);
+    if (!content) throw new Error("Content is empty");
+    await fs.writeFile(uri, content);
+    return { content: [{ type: 'text', text: 'File created successfully' }] };
+  } catch (error) {
+    return handleError(error, 'Error creating file');
+  }
+}
+
 // Function to handle errors
-function handleError(error: any) {
-  console.error("Error in fs_mcp tool:", error);
+function handleError(error: unknown, context?: string) {
+  const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+  const contextMessage = context ? `${context}: ` : '';
+
+  console.error(`Error in dhealth-intelligence:`, error);
 
   return {
-    isError: true,
-    content: [
-      {
-        type: "text",
-        text: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`
-      }
-    ]
+    content: [{
+      type: 'text',
+      text: `${contextMessage}${errorMessage}`
+    }]
   };
 }
 
