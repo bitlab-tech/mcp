@@ -8,6 +8,8 @@ A Node.js-based MCP (Model Context Protocol) server that provides file system op
 
 - Read file contents (including text, images, and PDFs)
 - List directory contents
+- Create new directories
+- Create new files with specified content
 - Secure file system access through MCP protocol
 - TypeScript support
 - Built-in error handling
@@ -37,7 +39,7 @@ npm run build
 
 ## Usage
 
-The server provides two main tools:
+The server provides four main tools:
 
 1. `read_file`: Read the contents of a file
    - Input: `{ uri: string }` (absolute path to the file)
@@ -45,6 +47,16 @@ The server provides two main tools:
 
 2. `read_folder`: List contents of a directory
    - Input: `{ uri: string }` (absolute path to the directory)
+
+4. `create_folder`: Create a new directory
+   - Input: `{ uri: string }` (absolute path for the new directory)
+   - Creates a new directory at the specified path
+   - Returns success message if directory is created successfully
+
+3. `create_file`: Create a new file with specified content
+   - Input: `{ uri: string, content: string }` (absolute path for the new file and its content)
+   - Creates a new file at the specified path with the given content
+   - Returns success message if file is created successfully
 
 ### Running the Server
 
