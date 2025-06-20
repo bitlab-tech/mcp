@@ -2,8 +2,8 @@
 
 A Node.js-based MCP (Model Context Protocol) server that provides Cosmos blockchain operations through a standardized interface. This tool allows AI models to interact with Cosmos appchains in a controlled and secure manner.
 
-<img src="screenshots/1.png" alt="Cosmos MCP Screenshot 1" width="900">
-<img src="screenshots/2.png" alt="Cosmos MCP Screenshot 2" width="900">
+<img src="screenshots/1.png" alt="Cosmos MCP Screenshot 1" width="777">
+<img src="screenshots/2.png" alt="Cosmos MCP Screenshot 2" width="777">
 
 ### Features
 
