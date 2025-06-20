@@ -28,6 +28,7 @@ const server = new Server({
 // Define tool schema using zod
 const createAccountSchema = z.object({
   prefix: z.string().describe("The Cosmos blockchain address prefix to create account with."),
+  coinType: z.string().describe("The BIP44 coin type identification."),
   filepath: z.string().describe("The path on computer to save the account information to. Make sure to ask user this value.")
 });
 
@@ -50,16 +51,20 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: "string",
               description: "The Cosmos blockchain address prefix to create account with."
             },
+            coinType: {
+              type: "string",
+              description: "The BIP44 coin type identification."
+            },
             filepath: {
               type: "string",
               description: "The path on computer to save the account information to. Make sure to ask user this value."
             }
           }
         },
-        required: ["chainId", "filepath"]
+        required: ["chainId", "coinType", "filepath"]
       },
       {
-        name: "check_balance",
+        name: "check_balances",
         description: "Check the balance of an account on Cosmos appchain.",
         inputSchema: {
           type: "object",
@@ -91,8 +96,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   switch (name) {
     case "create_account":
       return await createAccount(args);
-    case "check_balance":
-      return await checkBalance(args);
+    case "check_balances":
+      return await checkBalances(args);
     default:
       throw new Error(`Unknown tool: ${name}`);
   }
@@ -101,15 +106,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function createAccount(args: Record<string, unknown>) {
   try {
     const argsObj = createAccountSchema.parse(args);
-    const { prefix, filepath } = argsObj;
+    const { prefix, coinType, filepath } = argsObj;
 
     const wallet: DirectSecp256k1HdWallet = await DirectSecp256k1HdWallet.generate(
       24,
       {
-        hdPaths: [stringToPath("m/44'/10111'/0'/0/0")],
+        hdPaths: [stringToPath(`m/44'/${coinType}'/0'/0/0`)],
         prefix
       }
-    )
+    );
 
     const accounts = await wallet.getAccounts();
     const accountDetails = {
@@ -137,7 +142,7 @@ async function createAccount(args: Record<string, unknown>) {
   }
 }
 
-async function checkBalance(args: Record<string, unknown>) {
+async function checkBalances(args: Record<string, unknown>) {
   try {
     const argsObj = checkBalanceSchema.parse(args);
     const { accountAddress, nodeUrl } = argsObj;
