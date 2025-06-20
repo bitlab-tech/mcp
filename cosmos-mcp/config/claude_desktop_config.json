@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "cosmos-mcp": {
+      "command": "node",
+      "args": [
+        "/your/path/to/cosmos-mcp/build/index.js"
+      ]
+    }
+  }
+}
