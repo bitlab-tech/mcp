@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "fs-mcp": {
+    "search-mcp": {
       "command": "node",
       "args": [
         "/your/path/to/search-mcp/build/index.js"
