@@ -37,6 +37,11 @@ const checkBalanceSchema = z.object({
   nodeUrl: z.string().url().describe("The node url to send request to. Make sure to ask user this value."),
 });
 
+const checkTransactionSchema = z.object({
+  transactionHash: z.string().describe("The transaction's hash to get details from."),
+  nodeUrl: z.string().url().describe("The node url to send request to. Make sure to ask user this value."),
+});
+
 // Register tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
@@ -80,6 +85,24 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           },
           required: ["accountAddress", "nodeUrl"]
         }
+      },
+      {
+        name: "check_transaction",
+        description: "Get the details of a transaction on Cosmos appchain.",
+        inputSchema: {
+          type: "object",
+          properties: {
+            transactionHash: {
+              type: "string",
+              description: "The transaction's hash to get details from."
+            },
+            nodeUrl: {
+              type: "string",
+              desciption: "The node url to send request to. Make sure to ask user this value."
+            }
+          },
+          required: ["accountAddress", "nodeUrl"]
+        }
       }
     ]
   };
@@ -98,6 +121,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       return await createAccount(args);
     case "check_balances":
       return await checkBalances(args);
+    case "check_transaction":
+      return await checkTransaction(args);
     default:
       throw new Error(`Unknown tool: ${name}`);
   }
@@ -151,6 +176,30 @@ async function checkBalances(args: Record<string, unknown>) {
     const balances = await client.getAllBalances(accountAddress);
 
     return { content: [{ type: "text", text: JSON.stringify(balances) }] };
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
+async function checkTransaction(args: Record<string, unknown>) {
+  try {
+    const argsObj = checkTransactionSchema.parse(args);
+    const { transactionHash, nodeUrl } = argsObj;
+
+    const client = await StargateClient.connect(nodeUrl);
+    const transaction = await client.getTx(transactionHash);
+    const result = {
+      height: transaction?.height,
+      txIndex: transaction?.txIndex,
+      hash: transaction?.hash,
+      code: transaction?.code,
+      rawLog: transaction?.rawLog,
+      gasUsed: transaction?.gasUsed.toString(),
+      gasWanted: transaction?.gasWanted.toString(),
+      events: transaction?.events
+    }
+
+    return { content: [{ type: "text", text: JSON.stringify(result) }] };
   } catch (error) {
     return handleError(error);
   }
