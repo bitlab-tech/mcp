@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "gdrive-mcp": {
+      "command": "node",
+      "args": [
+        "/your/path/to/gdrive-mcp/build/index.js"
+      ],
+      "env": {
+        "CLIENT_ID": "your google_oauth_client_id",
+        "CLIENT_SECRET": "your google_oauth_client_secret"
+      }
+    }
+  }
+}
